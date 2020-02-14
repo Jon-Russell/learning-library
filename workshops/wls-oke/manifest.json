@@ -1,13 +1,13 @@
 {
     "tutorials": [
-        
-        {         
-            "title": "On-premises WebLogic to Oracle Container Engine for Kubernetes Workshop",
-            "description": "Introduction to the workshop",
+        {
+            "number": "0",
+            "filename": "./lab-000/content.md",
+            "title": "Read Me First",
+            "description": "Step-by-step workshop instructions",
             "partnumber": "Ennnnn_01",
-            "publisheddate": "10/31/2019",
-            "contentid": "12nnnn",
-            "filename": "./lab-000/content.md"
+            "publisheddate": "12/02/2020",
+            "contentid": "12nnnn"
         },
         {         
             "title": "Lab 100: Pull the Docker image for the WebLogic and push to Oracle Cloud Infrastructure Registry (OCIR)",

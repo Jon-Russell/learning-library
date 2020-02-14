@@ -97,11 +97,11 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
 
     ![](images/200/LabGuide200-e67b7705.png)
 
-  - Click the **Add Policy Statement** button
+  - Click the **Edit Policy Statement** button
 
     ![](images/200/LabGuide200-3d4a7471.png)
 
-  - In the Statement box, enter: `allow service OKE to manage all-resources in tenancy` and click **Add Statement**
+  - Click **Another Statement** and in the Statement box, enter: `allow service OKE to manage all-resources in tenancy`  
 
     ![](images/200/LabGuide200-bd5bcbd1.png)
 
@@ -122,8 +122,8 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
   - We don't need to make any changes to the default values on this form, but let's look at what will be created when we submit it.
 
     ![](images/LabGuide200-6ff14524.png)
-    ![](images/LabGuide200-11191333.png)
-
+    ![](images/200/LabGuide200-k8s-2.png)
+    
     - Starting at the top you'll notice that the cluster will be created in our **Demo** compartment.
     - We can customize the name of this cluster if we want
     - Multiple versions of Kubernetes are available, with the newest version selected by default
@@ -239,6 +239,10 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
 
     ![](images/LabGuide200-e67f88fa.png)
 
+  - Make sure to select **Assign a public IP address**
+
+    ![](images/200/LabGuide-instance-1.png)
+  
   - Click **Create**
 
     ![](images/LabGuide200-68185e86.png)
@@ -371,7 +375,6 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
 
 - The method you choose to install `kubectl` will depend on your operating system and any package managers that you may already use. The generic method of installation, downloading the binary file using `curl`, is given below (**run the appropriate command in a terminal or command prompt**). If you prefer to use a package manager such as apt-get, yum, homebrew, chocolatey, etc, please find the specific command in the [Kubernetes Documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
 
-
   **Windows**
     ```bash
     cd %USERPROFILE%\container-workshop
@@ -414,6 +417,52 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
 
     **NOTE**: You should see in the `cluster-info` that the Kubernetes master has an `oraclecloud.com` URL. If it instead has a `localhost` URL, your `KUBECONFIG` environment variable may not be set correctly. Double check the environment variable against the path and filename of your `kubeconfig` file.
 
+- In a text editor, create a file (for example, called **oke-admin-service-account.yaml**) with the following content:
+
+    ```bash
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: oke-admin
+      namespace: kube-system
+    ---
+    apiVersion: rbac.authorization.k8s.io/v1beta1
+    kind: ClusterRoleBinding
+    metadata:
+      name: oke-admin
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+    - kind: ServiceAccount
+      name: oke-admin
+      namespace: kube-system
+    ```
+
+- Create the service account and the clusterrolebinding in the cluster by entering the following command where <filename> is the name of the file you created earlier:
+
+    ```bash
+    kubectl apply -f oke-admin-service-account.yaml
+    ```
+
+- The **output** from the above command confirms the creation of the service account and the clusterrolebinding:
+
+    ```bash
+    serviceaccount "oke-admin" created
+    clusterrolebinding.rbac.authorization.k8s.io "oke-admin" created
+    ```
+
+- Obtain an authentication token for the oke-admin service account by entering:
+
+    ```
+    kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep oke-admin | awk '{print $1}')
+    ```
+
+- **Copy** the value of the **token** element from the output. You will use this token to connect to the dashboard.
+
+   ![](images/200/oke_1.png)
+
 - Now that we have verified that `kubectl` is connected to our cluster, let's increase the default auto-logout time so that we don't have to keep re-authenticating during the workshop. Note that the default logout time of 15 minutes is set for security reasons. The `--token-ttl=43200"` argument in the following command is the only change that we are making to the dashboard.
 
   **NOTE**: The following commands are **optional**.
@@ -446,9 +495,9 @@ Compartments are used to isolate resources within your OCI tenant. Role-based ac
 
   **NOTE**: If you receive an error stating `bind: address already in use`, you may have another application running on port 8001. You can specify a different port for the proxy by passing the `--port=` parameter, for example `kubectl proxy --port=8002`. Note that you  will have to modify the URL for the dashboard in the next step to match this port.
 
-- Leave the proxy server running and navigate to the [Kubernetes Dashboard by Right Clicking on this link](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/), and choosing **open in a new browser tab**.
+- Leave the proxy server running and navigate to the [Kubernetes Dashboard by Clicking on this link](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/), and choosing **open in a new browser tab**.
 
-- You are asked to authenticate to view the dashboard. Click **Choose kubeconfig file** and select your `kubeconfig` file from the folder `~/container-workshop/kubeconfig`. Click **Open**, then click **Sign In**.
+- In the [Kubernetes Dashboard](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/), select Token and paste the value of the token: element you copied earlier into the Token field. Click **Open**, then click **Sign In**.
 
   ![](images/200/LabGuide200-2a1a02ce.png)
 

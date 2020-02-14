@@ -191,7 +191,7 @@ Derek is a Python developer, and so he avoids spending time in secondary tasks s
 	  DBMS_CLOUD.create_credential(
 		credential_name => 'py4dev_cred',
 		username => '<your cloud userid>',
-		password => '<Auth Token Generated in STEP 4>'
+		password => '<Auth Token Generated in STEP 3>'
 	  );
 	end;
 	/

@@ -2,7 +2,8 @@
 This workshop lets you practice the main features in Oracle Data Safe, including Activity Auditing, Data Discovery, Data Masking, User Assessment, and Security Assessment.
 
 ## Access the Labs Using Our Web Interface
-**[Data Safe Hands-on Workshop](https://oracle.github.io/learning-library/data-management-library/security/data-safe-HOL)** to use our easy to navigate HTML format.
+**Click the image to use our easy to navigate HTML format:**
+[![Data Safe Hands-on Workshop](images/data-safe-hol.png " ")](https://oracle.github.io/learning-library/data-management-library/security/data-safe-HOL)
 
 ## Access the Labs on the Repo
 Alternatively, you can follow the labs on this repo:

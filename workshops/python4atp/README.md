@@ -20,15 +20,8 @@ If you already have an account or an active trial/free tier account, you may ski
 
 ## Sign Up for a Free Tier Account
 
-- Open up a browser and navigate to www.oracle.com. Click the **Oracle Cloud Free Tier** button in the upper right hand corner.
-
-    ![](images/free-tier-account.png)
-
-- Click on the **Start for Free** button
-
-    ![](images/free-tier-account-2.png)
-
-- Follow the instructions to create your account.  Be sure to enter an email you can access.  
+- Open up a browser and click [here](https://myservices.us.oraclecloud.com/mycloud/signup?language=en&sourceType=:ex:tb:::RC_NAMK190418P00033:HOLPythonATP&SC=:ex:tb:::RC_NAMK190418P00033:HOLPythonATP&pcode=NAMK190418P00033) to sign up for an Oracle Cloud Account.
+Follow the instructions to create your account.  Be sure to enter an email you can access.  
 
   ![](images/free-tier-account-3.png)
 

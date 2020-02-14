@@ -146,7 +146,7 @@ panel.
 2. Remove all columns from the both the Keys and Values panels.
 3. Drag and drop **MONTH** into the **Keys** panel.
 4. Drag and drop **REVENUE** into the **Values** panel.
-5. Drag and drop **AVG_12M_REVENUE** into the **Values** panel.
+5. Drag and drop **AVG\_12M\_REVENUE** into the **Values** panel.
 
     ![](img/BarChart2.png " ")
 

@@ -20,7 +20,7 @@ In Lab 200 you also continue to play the role of Derek, but now you get to the f
 
     ![](images/200/0-1.png)
 
-- In the search bar type visual and you should see Visual Studio Code in results.
+- In the search bar type visual and you should see **Visual Studio Code** in results.
 
     ![](images/200/0-2.png)
 

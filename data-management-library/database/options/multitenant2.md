@@ -1,22 +1,4 @@
-![](img/multitenant-title.png)  
-
-# Table of Contents #
-
-- [Lab Introduction](#lab-introduction)
-- [Setup](#setup)
-- [Section 1: Instant SaaS](#section-1-instant-saas)
-- [section 2: PDB Exploration](#section-2-pdb-exploration)
-- [Section 3: Upgrade from v1 to v2](#section-3-upgrade-from-v1-to-v2)
-- [Section 4: Containers Queries](#section-4-container-queries)
-- [Section 5: Application Root Clones and Compatibility](#section-5-application-root-clones-and-compatibility)
-- [Section 6: Expansion Beyond Single CDB and Application Root Replicas](#section-6-expansion-beyond-single-cdb-and-application-root-replicas)
-- [Section 7: Durable Location Transparency](#section-7-durable-location-transparency)
-- [Section 8: Data Sharing](#section-8-data-sharing)
-- [Section 9: Application Patches](#section-9-application-patches)
-- [Section 10: DBA Views](#section-10-dba-views)
-- [Section 11: Diagnosing, Correcting Problems, and Restarting Sync](#section-11-diagnosing-correcting-problems-and-restarting-sync)
-- [Section 12: Container Map](#section-12-container-map)
-
+# Hands-on with Multitenant (Advanced) #
 
 ## Lab Introduction
 This is a series of 12 hands-on labs designed to familiarize you with the Application Container functionality of Oracle Multitenant. In these labs, we follow the journey of a notional company, Walt’s Malts, as their business expands from a single store to a global powerhouse – “from startup to starship”. 
@@ -41,13 +23,6 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
 2.  Change to the ssh directory and ssh into your instance.  The public IP address can be found by going to Compute -> Instance.
    
     ````
-    cd .ssh
-    ssh -i optionskey opc@<your public ip address>
-    oci os object bulk-download -bn Multitenant --download-dir /home/opc 
-	sudo mv champion.zip /home/oracle
-	sudo chown oracle:oinstall /home/oracle/champion.zip 
-    sudo su - oracle
-    unzip champion.zip
     cd /home/oracle/labs/multitenant
     ````
 
@@ -57,7 +32,7 @@ All the scripts for this lab are located in the /home/oracle/labs/multitenant/sc
     ./resetCDB.sh
     ````
 
-## Section 1: Instant SaaS
+## Step 1: Instant SaaS
 This section shows how Multitenant with Application Containers provides an instant SaaS architecture for an application formerly architected for standalone deployment.
 
 The tasks you will accomplish in this lab are:
@@ -68,6 +43,8 @@ The tasks you will accomplish in this lab are:
 
 1. Connect to **CDB1**.
     ````
+    . oraenv
+    CDB1
     sqlplus /nolog
     connect sys/oracle@localhost:1523/cdb1 as sysdba
     ````
@@ -235,7 +212,7 @@ The tasks you will accomplish in this lab are:
     @Franchise_Data_Lab1
     ````
 
-## Section 2: PDB Exploration
+## Step 2: PDB Exploration
 This section will take a brief tour of the newly created SaaS estate.
 
 The tasks you will accomplish in this lab are:
@@ -326,7 +303,7 @@ The tasks you will accomplish in this lab are:
     @Lab2_Queries.sql
     ````
     
-## Section 3: Upgrade from v1 to v2
+## Step 3: Upgrade from v1 to v2
 This section we upgrade Application wmStore from v1 to v2. Despite each franchise having a separate tenant PDB, there is only one master application definition to be upgraded – in Application Root. We run the upgrade script only once, against the Application Root. It is then simply a matter of synchronizing the tenant PDBs for each franchise for them to be upgraded to the new version. Note that this model allows for granular (per tenant/franchise) upgrade schedules.
 
 The tasks you will accomplish in this lab are:
@@ -454,7 +431,7 @@ The tasks you will accomplish in this lab are:
     set echo off
     ````
 
-## Section 4: Containers Queries
+## Step 4: Containers Queries
 This section we introduce a very powerful cross-container aggregation capability – containers() queries. Containers() queries allow an application administrator to connect to Application Root and aggregate data with a single query across multiple Application Tenants (Franchises) – or across all of them. This is another example of how Multitenant, with Application Containers, allows you to manage many Application Tenants as one, when needed. Notice values in column Franchise come from Con$Name. Remember that containers() queries are executed in Root and all containers plugged into it.
 
 The tasks you will accomplish in this lab are:
@@ -534,7 +511,7 @@ The tasks you will accomplish in this lab are:
     set echo off
     ````
 
-## Section 5: Application Root Clones and Compatibility
+## Step 5: Application Root Clones and Compatibility
 This section will explore the PDBs, users and data within the various pluggable databses created in the earlier section.
 
 The tasks you will accomplish in this lab are:
@@ -692,7 +669,7 @@ The tasks you will accomplish in this lab are:
     ;
     ````
 
-## Section 6: Expansion Beyond Single CDB and Application Root Replicas
+## Step 6: Expansion Beyond Single CDB and Application Root Replicas
 This section we follow the global expansion of Walt's Malts. In order to comply with requirements of data sovereignty and latency Walt's Malts has had to expand into a second CDB, CDB2. (In reality this would be in a separate server.) It is very important to note that we still only have a single master application definition, despite the application now being deployed across multiple CDBs.
 
 The tasks you will accomplish in this lab are:
@@ -861,7 +838,7 @@ The tasks you will accomplish in this lab are:
     @Franchise_Data_Lab6
     ````
 
-## Section 7: Durable Location Transparency
+## Step 7: Durable Location Transparency
 This section demonstrates "durable location transparency". In the previous section we saw how Proxy PDBs can provide location transparency. The Proxy PDBs for the Application Root Replicas (ARRs) provided local context (in the master Application Root) for the ARRs, which are physically located in a different CDB. This is a good example of location transparency. In this section, we see how these ARR Proxies can provide "durable location transparency". That is, location transparency that survives the physical reconfiguration of the Application Estate – specifically by relocating an Application PDB for a particular franchise from one CDB to another.
 
 The tasks you will accomplish in this lab are:
@@ -941,7 +918,7 @@ The tasks you will accomplish in this lab are:
     ;
     ````
 
-## Section 8: Data Sharing
+## Step 8: Data Sharing
 This section we introduce the advanced concept of data sharing. We have already seen how Multitenant, with Application Containers, can provide an instant SaaS architecture for an application previously architected for standalone deployment. Technically this is done by installing a master application definition in an Application Root. Application PDBs for each tenant / franchise are plugged into this Application Root and the metadata for the database components of the Application definition is served from the Application root. However,so far all data, including data which may be considered part of the application definition ("seed data") has been local. In other words, there's a replica of this seed data in every Application PDB. In this lab we'll see how, in addition to metadata, common data may also be shared from Application Root. To do this we'll upgrade application wmStore to v3.0 and introduce various powerful data sharing capabilities.
 
 The tasks you will accomplish in this lab are:
@@ -1117,7 +1094,7 @@ The tasks you will accomplish in this lab are:
 
 
 
-## Section 9: Application Patches
+## Step 9: Application Patches
 This section we define an application patch. Patches are comparable to the application upgrades that we've seen in previous labs, but there are three important differences.
 - The types of operation that are allowed in a patch are more limited. Essentially operations which are destructive are not allowed, including:
     - Drop a table, column, index, trigger...
@@ -1231,7 +1208,7 @@ The tasks you will accomplish in this lab are:
 
     ````
 
-## Section 10: DBA Views
+## Step 10: DBA Views
 This section we introduce some of the DBA Views which are relevant to Application Containers.
 
 The tasks you will accomplish in this lab are:
@@ -1387,7 +1364,7 @@ The tasks you will accomplish in this lab are:
     set echo off
     ````
 
-## Section 11: Diagnosing, Correcting Problems, and Restarting Sync
+## Step 11: Diagnosing, Correcting Problems, and Restarting Sync
 This section we explore the restartability of the patching process.
 
 The tasks you will accomplish in this lab are:
@@ -1438,7 +1415,7 @@ The tasks you will accomplish in this lab are:
     alter pluggable database application wmStore sync;
     ````
 
-## Section 12: Container Map
+## Step 12: Container Map
 This section we explore another location transparency technology: Container Map. Here we follow the expansion of Walt's Malts through the acquisition of a formerly independent distributor of Walt's Malts products. This company is named Terminally Chill, and their niche was selling Walt's Malts produce through a number of small kiosks in various airports globally. The Terminally Chill application has a different design from the original wmStore application. Whereas wmStore was originally designed for standalone deployment, Terminally Chill used a single database to manage data for all kiosks in all airports. The application server tiers are designed to connect directly to a single database, with query predicates to retrieve data for the right airport and kiosk. In this lab, we'll see how Container Map can help accommodate applications of this design.
 
 The tasks you will accomplish in this lab are:

@@ -11,7 +11,7 @@ You can load data into Autonomous Database using Oracle Database tools and 3rd p
 For the fastest data loading experience Oracle recommends uploading the source
 files to a cloud-based object store before loading the data into your Autonomous Database.
 
-Today we will use the PL/SQL package **DBMS_CLOUD**. The DBMS_CLOUD package supports loading
+Today we will use the PL/SQL package **DBMS\_CLOUD**. The DBMS_CLOUD package supports loading
 data files from the following Cloud sources: 
 1. Oracle Cloud Infrastructure Object Storage (OCI Object Storage)
 2. Oracle Cloud Infrastructure Object Storage Classic
@@ -96,7 +96,7 @@ communication between your Autonomous Database and the object store relies on th
 
     ![](images/adw-loading-identity-users.png " ") 
 
-3. Select your username.  Click **Auth Tokens** under **Resources** on the left of the console. _Note: This will be the the username you created when you launched your trial NOT ziplab_user_.
+3. Select your username.  Click **Auth Tokens** under **Resources** on the left of the console. _Note: This will be the the username you created when you launched your trial NOT ziplab\_user_.
 
     ![](images/adw-loading-user-screen.png " ") 
 
@@ -145,16 +145,16 @@ Go back to your ADW instance via the menu.
     ![](images/adw-loading-sql-dev-logging-in.png " ")
 
 6. SQL Developer Web has an interface similar to the installed client.  Note where the Worksheet is and the Query Results.
-7. Copy the pl/sql procedure into SQL Developer Web. Fill in the username and password using the Oracle Cloud username you signed up with and the auth token you saved earlier. The create_credential procedure of the DBMS_CLOUD package stores the object store credentials in your database. This pl/sql procedure takes in the following arguments:
-    * credential name
-    * Oracle cloud username
+7. Copy the PL/SQL procedure into SQL Developer Web. Fill in the username and password using the Oracle Cloud username you signed up with and the auth token you saved earlier. The create\_credential procedure of the DBMS\_CLOUD package stores the object store credentials in your database. This PL/SQL procedure takes in the following arguments:
+    * Credential name
+    * Oracle Cloud username
     * Authorization token created earlier
 
     ```SQL
     begin  
     DBMS_CLOUD.create_credential (  
-    credential_name => 'OBJ_STORE_CRED',  
-    username => '<enter your username\>',  
+    credential_name => 'OBJ\_STORE\_CRED',  
+    username => '\<enter your username\>',  
     password => '\<enter your savedAuth Token\>'  
     ) ;  
     end;  
@@ -171,7 +171,7 @@ your ADW instance now.
 ## STEP 4: Copy Data from Object Store to Autonomous Database Tables ##
 Before data is copied, the tables and objects need to be created in ADW.  In this lab you will create the target objects.
 
-1. Download the sql script to create the tables for your ADB instance **[here](files/adw-loading.sql)**.  Open up the file in notepad from your desktop.   _(Remember to click the back button to return to this window)_ This script will be used to create the tables and constraints.
+1. Download the SQL script to create the tables for your ADB instance **[here](files/adw-loading.sql)**.  Open up the file in notepad from your desktop.   _(Remember to click the back button to return to this window)_ This script will be used to create the tables and constraints.
 
 2. Copy and paste the commands in your SQL Developer Web worksheet area overwriting any existing commands.
 
@@ -185,14 +185,14 @@ Before data is copied, the tables and objects need to be created in ADW.  In thi
 
     ![](images/adw-loading-create-tables-3.png " ")
 
-5. Now you have empty tables and staged data in the OCI Object store. To get the data from the object store to your ADB instance, you need to get some information about the object. To move the data we will be using the dbms_cloud.copy_data procedure.  The procedure takes information about the location of the data you staged in your object store.  Review the procedure.
+5. Now you have empty tables and staged data in the OCI Object store. To get the data from the object store to your ADB instance, you need to get some information about the object. To move the data we will be using the dbms\_cloud.copy\_data procedure.  The procedure takes information about the location of the data you staged in your object store.  Review the procedure.
 
     ````SQL    
     begin
     dbms_cloud.copy_data(
         table_name =>'<ENTER_TABLE_NAME>',
-        credential_name =>'OBJ_STORE_CRED',
-        file_uri_list =>'<entertenancy-bucket-address>/chan_v3.dat',
+        credential_name =>'OBJ\_STORE\_CRED',
+        file_uri_list =>'\<entertenancy-bucket-address\>/chan_v3.dat',
         format => json_object('ignoremissingcolumns' value 'true', 'removequotes' value 'true')
     );
     end;
@@ -212,7 +212,7 @@ Before data is copied, the tables and objects need to be created in ADW.  In thi
 
     ![](images/adw-view-object-details-customers.png " ")
 
-9. Download this [sql script](files/adw-loading-copy-data.sql)  to load your tables. _(Remember to click the back button to return)_.  Replace the file_uri_list with the string you saved in notepad. The script already has the correct table names, just replace the tenancy address. 
+9. Download this [SQL script](files/adw-loading-copy-data.sql)  to load your tables. _(Remember to click the back button to return)_.  Replace the file\_uri\_list with the string you saved in notepad. The script already has the correct table names, just replace the tenancy address. 
 
     ````SQL
     begin
@@ -226,8 +226,8 @@ Before data is copied, the tables and objects need to be created in ADW.  In thi
     /
     ````
 
-10. Paste the sql script into SQL Workshet.
-11. For each of the URI in the script you will need to replace only the first portion of the file_uri_list leaving the file name as is. Leave the table names intact as they are preset for you in the sql script.
+10. Paste the SQL script into SQL Worksheet.
+11. For each of the URI in the script you will need to replace only the first portion of the file\_uri\_list leaving the file name as is. Leave the table names intact as they are preset for you in the SQL script.
 
     ![](images/adw-loading-copy-data-2.png " ")
 

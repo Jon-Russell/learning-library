@@ -1,4 +1,4 @@
-# OCI Quick Start (VCN, Compute and Block Volume)
+# OCI Quick Start Lab (VCN, Compute and Block Volume)
 
 ## Table of Contents
 
